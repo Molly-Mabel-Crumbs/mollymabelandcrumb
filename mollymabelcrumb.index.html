@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sourdough Calculator — Molly, Mabel & Crumb</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --cream: #F7F3EC; --parchment: #EDE6D9; --crust: #C4813A; --crust-dark: #9E6228;
+    --crust-light: #F0D9BC; --char: #2A2318; --muted: #7A6E60; --subtle: #B8AFA3;
+    --white: #FEFCF8; --border: rgba(42,35,24,0.12); --radius: 12px; --shadow: 0 2px 16px rgba(42,35,24,0.08);
+  }
+  body { font-family: 'Inter', sans-serif; background: var(--cream); color: var(--char); min-height: 100vh; }
+  header { background: var(--char); padding: 1.25rem 2rem; display: flex; align-items: center; justify-content: space-between; }
+  .logo { font-family: 'Playfair Display', serif; font-size: 1.25rem; font-weight: 600; color: var(--crust-light); letter-spacing: 0.01em; }
+  .logo span { color: var(--subtle); font-size: 0.75rem; font-family: 'Inter', sans-serif; font-weight: 400; display: block; letter-spacing: 0.08em; text-transform: uppercase; margin-top: 1px; }
+  .hero { background: var(--char); padding: 3rem 2rem 3.5rem; text-align: center; position: relative; overflow: hidden; }
+  .hero::before { content: ''; position: absolute; bottom: -1px; left: 0; right: 0; height: 40px; background: var(--cream); clip-path: ellipse(55% 100% at 50% 100%); }
+  .hero-eyebrow { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--crust); margin-bottom: 0.75rem; }
+  .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 5vw, 3rem); font-weight: 600; color: var(--white); line-height: 1.15; margin-bottom: 0.75rem; }
+  .hero h1 em { color: var(--crust-light); font-style: normal; }
+  .hero p { font-size: 0.95rem; color: var(--subtle); max-width: 420px; margin: 0 auto; line-height: 1.6; }
+  main { max-width: 720px; margin: 0 auto; padding: 2.5rem 1.25rem 4rem; }
+  .card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 1rem; box-shadow: var(--shadow); }
+  .card-title { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 600; color: var(--char); margin-bottom: 1.25rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
+  .card-title .dot { width: 8px; height: 8px; background: var(--crust); border-radius: 50%; flex-shrink: 0; }
+  .field { margin-bottom: 1.25rem; }
+  .field:last-of-type { margin-bottom: 0; }
+  label { display: flex; justify-content: space-between; align-items: baseline; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.5rem; }
+  label .hint { font-size: 0.72rem; font-weight: 400; text-transform: none; letter-spacing: 0; color: var(--subtle); }
+  .input-row { display: flex; align-items: center; border: 1.5px solid var(--border); border-radius: 8px; overflow: hidden; background: var(--white); transition: border-color 0.15s; }
+  .input-row:focus-within { border-color: var(--crust); }
+  .input-row input { flex: 1; border: none; outline: none; padding: 0.65rem 0.85rem; font-family: 'Inter', sans-serif; font-size: 1.05rem; font-weight: 500; color: var(--char); background: transparent; min-width: 0; }
+  .input-row .unit { padding: 0.65rem 0.85rem; font-size: 0.8rem; font-weight: 600; color: var(--muted); background: var(--parchment); border-left: 1px solid var(--border); white-space: nowrap; }
+  .slider-wrap { padding: 0.25rem 0; }
+  input[type=range] { -webkit-appearance: none; width: 100%; height: 4px; background: var(--parchment); border-radius: 2px; outline: none; cursor: pointer; margin: 0.5rem 0; }
+  input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 20px; height: 20px; border-radius: 50%; background: var(--crust); border: 3px solid var(--white); box-shadow: 0 0 0 1.5px var(--crust); cursor: pointer; }
+  .slider-labels { display: flex; justify-content: space-between; font-size: 0.68rem; color: var(--subtle); margin-top: 2px; }
+  .slider-val { font-size: 0.9rem; font-weight: 600; color: var(--crust); margin-bottom: 2px; display: block; }
+  .hydration-badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 0.72rem; font-weight: 600; margin-left: 8px; transition: all 0.2s; }
+  .pill-row { display: flex; gap: 6px; flex-wrap: wrap; }
+  .pill { padding: 5px 14px; border-radius: 20px; border: 1.5px solid var(--border); font-size: 0.78rem; font-weight: 500; color: var(--muted); cursor: pointer; background: var(--white); transition: all 0.15s; }
+  .pill:hover { border-color: var(--crust); color: var(--crust); }
+  .pill.active { background: var(--crust); border-color: var(--crust); color: var(--white); }
+  .results-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; margin-bottom: 1rem; }
+  .result-item { background: var(--parchment); border-radius: 10px; padding: 0.9rem 1rem; text-align: center; }
+  .result-item.highlight { background: var(--char); }
+  .result-label { font-size: 0.68rem; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+  .result-item.highlight .result-label { color: var(--subtle); }
+  .result-value { font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 600; color: var(--crust); line-height: 1; }
+  .result-item.highlight .result-value { color: var(--crust-light); }
+  .result-unit { font-size: 0.72rem; color: var(--subtle); margin-top: 3px; }
+  .tip-box { background: var(--crust-light); border-left: 3px solid var(--crust); border-radius: 0 8px 8px 0; padding: 0.85rem 1rem; font-size: 0.82rem; color: var(--crust-dark); line-height: 1.55; margin-top: 1rem; }
+  .tip-box strong { font-weight: 600; display: block; margin-bottom: 2px; }
+  .step { display: flex; gap: 12px; align-items: flex-start; padding: 0.65rem 0; border-bottom: 1px solid var(--border); }
+  .step:last-child { border-bottom: none; }
+  .step-num { width: 24px; height: 24px; border-radius: 50%; background: var(--parchment); border: 1.5px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 600; color: var(--muted); flex-shrink: 0; margin-top: 1px; }
+  .step-name { font-size: 0.85rem; font-weight: 600; color: var(--char); }
+  .step-time { font-size: 0.78rem; color: var(--muted); margin-top: 1px; }
+  .footer-cta { background: var(--char); border-radius: var(--radius); padding: 1.5rem; text-align: center; margin-top: 1.5rem; }
+  .footer-cta p { font-size: 0.85rem; color: var(--subtle); margin-bottom: 0.5rem; }
+  .footer-cta strong { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--white); display: block; margin-bottom: 0.25rem; }
+  .footer-cta .handle { font-size: 0.8rem; color: var(--crust); font-weight: 600; letter-spacing: 0.03em; }
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">Molly, Mabel &amp; Crumb<span>Sourdough Calculator</span></div>
+</header>
+<div class="hero">
+  <p class="hero-eyebrow">Baker's percentages made simple</p>
+  <h1>Calculate your<br><em>perfect loaf</em></h1>
+  <p>Enter your flour weight, adjust hydration, and get every ingredient amount instantly.</p>
+</div>
+<main>
+  <div class="card">
+    <p class="card-title"><span class="dot"></span>Your recipe inputs</p>
+    <div class="field">
+      <label>Flour weight <span class="hint">the base for all calculations</span></label>
+      <div class="input-row">
+        <input type="number" id="flour" value="500" min="100" max="5000" step="10" oninput="calculate()">
+        <span class="unit">grams</span>
+      </div>
+    </div>
+    <div class="field">
+      <label>Hydration <span class="hint"><span id="hydration-badge" class="hydration-badge">75% — balanced</span></span></label>
+      <div class="slider-wrap">
+        <input type="range" id="hydration" min="60" max="90" value="75" step="1" oninput="calculate()">
+        <div class="slider-labels"><span>60% firm</span><span>75% balanced</span><span>90% very wet</span></div>
+      </div>
+    </div>
+    <div class="field">
+      <label>Starter <span class="hint"><span id="starter-badge">20% of flour</span></span></label>
+      <div class="slider-wrap">
+        <input type="range" id="starter-pct" min="5" max="30" value="20" step="1" oninput="calculate()">
+        <div class="slider-labels"><span>5% slow</span><span>15–20% standard</span><span>30% fast</span></div>
+      </div>
+    </div>
+    <div class="field">
+      <label>Salt <span class="hint"><span id="salt-badge">2% of flour</span></span></label>
+      <div class="slider-wrap">
+        <input type="range" id="salt-pct" min="1.5" max="2.5" value="2" step="0.1" oninput="calculate()">
+        <div class="slider-labels"><span>1.5% mild</span><span>2% standard</span><span>2.5% bold</span></div>
+      </div>
+    </div>
+    <div class="field">
+      <label>Loaves <span class="hint">scale the whole recipe</span></label>
+      <div class="pill-row">
+        <button class="pill active" onclick="setLoaves(1,this)">1 loaf</button>
+        <button class="pill" onclick="setLoaves(2,this)">2 loaves</button>
+        <button class="pill" onclick="setLoaves(3,this)">3 loaves</button>
+        <button class="pill" onclick="setLoaves(4,this)">4 loaves</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <p class="card-title"><span class="dot"></span>Your recipe</p>
+    <div class="results-grid">
+      <div class="result-item highlight">
+        <p class="result-label">Flour</p>
+        <p class="result-value" id="res-flour">500</p>
+        <p class="result-unit">grams</p>
+      </div>
+      <div class="result-item">
+        <p class="result-label">Water</p>
+        <p class="result-value" id="res-water">375</p>
+        <p class="result-unit">grams</p>
+      </div>
+      <div class="result-item">
+        <p class="result-label">Starter</p>
+        <p class="result-value" id="res-starter">100</p>
+        <p class="result-unit">grams</p>
+      </div>
+      <div class="result-item">
+        <p class="result-label">Salt</p>
+        <p class="result-value" id="res-salt">10</p>
+        <p class="result-unit">grams</p>
+      </div>
+      <div class="result-item">
+        <p class="result-label">Total dough</p>
+        <p class="result-value" id="res-total">985</p>
+        <p class="result-unit">grams</p>
+      </div>
+    </div>
+    <div class="tip-box" id="tip-box">
+      <strong>Beginner tip</strong>
+      75% hydration is the sweet spot for learning. The dough is workable but still produces an open, beautiful crumb.
+    </div>
+  </div>
+
+  <div class="card">
+    <p class="card-title"><span class="dot"></span>Bake day schedule</p>
+    <p style="font-size:0.82rem;color:var(--muted);margin-bottom:1rem;">Starting at 8:00 AM — adjust to your kitchen temperature.</p>
+    <div id="schedule"></div>
+  </div>
+
+  <div class="footer-cta">
+    <p>More tips, recipes &amp; sourdough content</p>
+    <strong>Molly, Mabel &amp; Crumb</strong>
+    <span class="handle">@MollyMabelCrumb on Instagram</span>
+  </div>
+</main>
+
+<script>
+let loaves = 1;
+const tips = {
+  low:   '<strong>Lower hydration (60–69%)</strong> is great for beginners — the dough handles easily and still bakes beautifully. Great for sandwich loaves too.',
+  med:   '<strong>70–79% hydration</strong> is the sweet spot for learning. Workable dough with an open, beautiful crumb. This is where most home bakers live.',
+  high:  '<strong>80–84% hydration</strong> produces a more open, irregular crumb. Expect stickier dough — wet hands and a bench scraper are your best friends.',
+  vhigh: '<strong>85%+ hydration</strong> is advanced territory. Incredible crumb structure is possible, but the dough is very slack. Master lower hydrations first.'
+};
+const schedule = [
+  ['Mix dough + autolyse',        '8:00 AM',          '30 min'],
+  ['Add starter + salt',          '8:30 AM',          '10 min'],
+  ['Stretch & fold (4 sets)',     '9:00 – 11:00 AM',  'Every 30 min'],
+  ['Bulk fermentation',           '11:00 AM – 3:00 PM','4–5 hrs at 75°F'],
+  ['Shape the loaf',              '3:00 PM',          '10 min'],
+  ['Cold proof in fridge',        '3:30 PM',          'Overnight (8–16 hrs)'],
+  ['Preheat oven + dutch oven',   'Next morning 7:30 AM','45–60 min at 475°F'],
+  ['Score & bake (lid on)',       '8:30 AM',          '18–20 min at 475°F'],
+  ['Remove lid, lower to 450°F', '8:50 AM',          '18–20 min until internal temp 205–210°F'],
+  ['Cool on wire rack',           '9:10 AM',          'At least 1 hour — be patient!'],
+];
+document.getElementById('schedule').innerHTML = schedule.map((s,i) => `
+  <div class="step">
+    <div class="step-num">${i+1}</div>
+    <div><div class="step-name">${s[0]}</div><div class="step-time">${s[1]} &nbsp;·&nbsp; ${s[2]}</div></div>
+  </div>`).join('');
+
+function calculate() {
+  const flourBase = parseFloat(document.getElementById('flour').value) || 500;
+  const hyd = parseFloat(document.getElementById('hydration').value);
+  const sPct = parseFloat(document.getElementById('starter-pct').value);
+  const saltPct = parseFloat(document.getElementById('salt-pct').value);
+  const flour = Math.round(flourBase * loaves);
+  const water = Math.round(flour * hyd / 100);
+  const starter = Math.round(flour * sPct / 100);
+  const salt = Math.round(flour * saltPct / 100 * 10) / 10;
+  const total = flour + water + starter + Math.round(salt);
+  document.getElementById('res-flour').textContent = flour.toLocaleString();
+  document.getElementById('res-water').textContent = water.toLocaleString();
+  document.getElementById('res-starter').textContent = starter.toLocaleString();
+  document.getElementById('res-salt').textContent = Number.isInteger(salt) ? salt : salt.toFixed(1);
+  document.getElementById('res-total').textContent = total.toLocaleString();
+  document.getElementById('starter-badge').textContent = sPct + '% of flour';
+  document.getElementById('salt-badge').textContent = saltPct + '% of flour';
+  const badge = document.getElementById('hydration-badge');
+  let tier, label, bg, col;
+  if (hyd < 70)      { tier='low';   label='firm dough';   bg='#D9C4A8'; col='#6B4F2A'; }
+  else if (hyd < 80) { tier='med';   label='balanced';     bg='#F0D9BC'; col='#9E6228'; }
+  else if (hyd < 85) { tier='high';  label='open crumb';   bg='#C4813A'; col='#fff'; }
+  else               { tier='vhigh'; label='very wet';      bg='#9E6228'; col='#fff'; }
+  badge.textContent = hyd + '% — ' + label;
+  badge.style.background = bg; badge.style.color = col;
+  document.getElementById('tip-box').innerHTML = tips[tier];
+}
+function setLoaves(n, btn) {
+  loaves = n;
+  document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  calculate();
+}
+calculate();
+</script>
+</body>
+</html>
