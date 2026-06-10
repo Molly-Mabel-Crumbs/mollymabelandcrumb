@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Starter Feeding Calculator — Molly, Mabel & Crumb</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --cream: #F7F3EC; --parchment: #EDE6D9; --crust: #C4813A; --crust-dark: #9E6228;
+    --crust-light: #F0D9BC; --char: #2A2318; --muted: #7A6E60; --subtle: #B8AFA3;
+    --white: #FEFCF8; --border: rgba(42,35,24,0.12); --radius: 12px; --shadow: 0 2px 16px rgba(42,35,24,0.08);
+  }
+  body { font-family: 'Inter', sans-serif; background: var(--cream); color: var(--char); min-height: 100vh; }
+  header { background: var(--char); padding: 1.25rem 2rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+  .logo { font-family: 'Playfair Display', serif; font-size: 1.25rem; font-weight: 600; color: var(--crust-light); letter-spacing: 0.01em; }
+  .logo span { color: var(--subtle); font-size: 0.75rem; font-family: 'Inter', sans-serif; font-weight: 400; display: block; letter-spacing: 0.08em; text-transform: uppercase; margin-top: 1px; }
+  .nav-links { display: flex; gap: 8px; }
+  .nav-link { font-size: 0.75rem; font-weight: 500; padding: 5px 12px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.15); color: var(--subtle); text-decoration: none; transition: all 0.15s; white-space: nowrap; }
+  .nav-link:hover { border-color: var(--crust); color: var(--crust-light); }
+  .nav-link.active { background: var(--crust); border-color: var(--crust); color: var(--white); }
+  .hero { background: var(--char); padding: 3rem 2rem 3.5rem; text-align: center; position: relative; overflow: hidden; }
+  .hero::before { content: ''; position: absolute; bottom: -1px; left: 0; right: 0; height: 40px; background: var(--cream); clip-path: ellipse(55% 100% at 50% 100%); }
+  .hero-eyebrow { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--crust); margin-bottom: 0.75rem; }
+  .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 5vw, 3rem); font-weight: 600; color: var(--white); line-height: 1.15; margin-bottom: 0.75rem; }
+  .hero h1 em { color: var(--crust-light); font-style: normal; }
+  .hero p { font-size: 0.95rem; color: var(--subtle); max-width: 460px; margin: 0 auto; line-height: 1.6; }
+  main { max-width: 720px; margin: 0 auto; padding: 2.5rem 1.25rem 4rem; }
+  .card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 1rem; box-shadow: var(--shadow); }
+  .card-title { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 600; color: var(--char); margin-bottom: 1.25rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
+  .card-title .dot { width: 8px; height: 8px; background: var(--crust); border-radius: 50%; flex-shrink: 0; }
+  .field { margin-bottom: 1.25rem; }
+  .field:last-of-type { margin-bottom: 0; }
+  label { display: flex; justify-content: space-between; align-items: baseline; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.5rem; }
+  label .hint { font-size: 0.72rem; font-weight: 400; text-transform: none; letter-spacing: 0; color: var(--subtle); }
+  .input-row { display: flex; align-items: center; border: 1.5px solid var(--border); border-radius: 8px; overflow: hidden; background: var(--white); transition: border-color 0.15s; }
+  .input-row:focus-within { border-color: var(--crust); }
+  .input-row input { flex: 1; border: none; outline: none; padding: 0.65rem 0.85rem; font-family: 'Inter', sans-serif; font-size: 1.05rem; font-weight: 500; color: var(--char); background: transparent; min-width: 0; }
+  .input-row .unit { padding: 0.65rem 0.85rem; font-size: 0.8rem; font-weight: 600; color: var(--muted); background: var(--parchment); border-left: 1px solid var(--border); white-space: nowrap; }
+  .pill-row { display: flex; gap: 6px; flex-wrap: wrap; }
+  .pill { padding: 5px 14px; border-radius: 20px; border: 1.5px solid var(--border); font-size: 0.78rem; font-weight: 500; color: var(--muted); cursor: pointer; background: var(--white); transition: all 0.15s; }
+  .pill:hover { border-color: var(--crust); color: var(--crust); }
+  .pill.active { background: var(--crust); border-color: var(--crust); color: var(--white); }
+
+  /* Big answer card */
+  .answer-card { background: var(--char); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 1rem; }
+  .answer-eyebrow { font-size: 0.68rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--subtle); margin-bottom: 0.5rem; }
+  .answer-headline { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 600; color: var(--white); margin-bottom: 1.25rem; line-height: 1.4; }
+  .answer-headline em { color: var(--crust-light); font-style: normal; }
+  .feed-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; }
+  .feed-item { background: rgba(255,255,255,0.07); border-radius: 10px; padding: 0.9rem 1rem; text-align: center; }
+  .feed-item.highlight { background: var(--crust); }
+  .feed-label { font-size: 0.65rem; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: var(--subtle); margin-bottom: 6px; }
+  .feed-item.highlight .feed-label { color: rgba(255,255,255,0.7); }
+  .feed-value { font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 600; color: var(--crust-light); line-height: 1; }
+  .feed-item.highlight .feed-value { color: var(--white); }
+  .feed-unit { font-size: 0.72rem; color: var(--subtle); margin-top: 3px; }
+
+  /* Timeline */
+  .timeline { position: relative; padding-left: 28px; }
+  .timeline::before { content: ''; position: absolute; left: 8px; top: 8px; bottom: 8px; width: 1.5px; background: var(--border); }
+  .tl-item { position: relative; padding: 0 0 1.1rem 1rem; }
+  .tl-item:last-child { padding-bottom: 0; }
+  .tl-dot { position: absolute; left: -24px; top: 3px; width: 12px; height: 12px; border-radius: 50%; background: var(--parchment); border: 2px solid var(--border); }
+  .tl-dot.active { background: var(--crust); border-color: var(--crust); }
+  .tl-dot.bake { background: var(--char); border-color: var(--char); }
+  .tl-time { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--crust); margin-bottom: 2px; }
+  .tl-name { font-size: 0.88rem; font-weight: 600; color: var(--char); }
+  .tl-desc { font-size: 0.78rem; color: var(--muted); margin-top: 2px; line-height: 1.5; }
+
+  .tip-box { background: var(--crust-light); border-left: 3px solid var(--crust); border-radius: 0 8px 8px 0; padding: 0.85rem 1rem; font-size: 0.82rem; color: var(--crust-dark); line-height: 1.55; margin-top: 1rem; }
+  .tip-box strong { font-weight: 600; display: block; margin-bottom: 2px; }
+
+  .footer-cta { background: var(--char); border-radius: var(--radius); padding: 1.5rem; text-align: center; margin-top: 1.5rem; }
+  .footer-cta p { font-size: 0.85rem; color: var(--subtle); margin-bottom: 0.5rem; }
+  .footer-cta strong { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--white); display: block; margin-bottom: 0.25rem; }
+  .footer-cta .handle { font-size: 0.8rem; color: var(--crust); font-weight: 600; letter-spacing: 0.03em; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Molly, Mabel &amp; Crumb<span>Starter Feeding Calculator</span></div>
+  <div class="nav-links">
+    <a href="index.html" class="nav-link">Recipe calculator</a>
+    <a href="starter-calculator.html" class="nav-link active">Starter feeding</a>
+  </div>
+</header>
+
+<div class="hero">
+  <p class="hero-eyebrow">Feed Mabel the right amount</p>
+  <h1>How much to feed<br><em>your starter tonight</em></h1>
+  <p>Tell us how many loaves you're baking and what ratio you feed at — we'll tell you exactly what Mabel needs.</p>
+</div>
+
+<main>
+
+  <div class="card">
+    <p class="card-title"><span class="dot"></span>Your bake plan</p>
+
+    <div class="field">
+      <label>How many loaves? <span class="hint">baking tomorrow</span></label>
+      <div class="pill-row" id="loaf-pills">
+        <button class="pill" onclick="setLoaves(1,this)">1 loaf</button>
+        <button class="pill active" onclick="setLoaves(2,this)">2 loaves</button>
+        <button class="pill" onclick="setLoaves(3,this)">3 loaves</button>
+        <button class="pill" onclick="setLoaves(4,this)">4 loaves</button>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>How much starter does your recipe use? <span class="hint">per loaf</span></label>
+      <p style="font-size:0.78rem;color:var(--muted);line-height:1.5;margin-bottom:0.6rem;">This is the starter amount from your recipe. If you used the recipe calculator with 500g flour, the default is 100g of starter per loaf (20%). Pick the closest option below.</p>
+      <div class="pill-row" id="pct-pills">
+        <button class="pill" onclick="setStarterPct(15,this)">15% <span style="font-weight:400;font-size:0.7rem;">(75g per 500g flour)</span></button>
+        <button class="pill active" onclick="setStarterPct(20,this)">20% <span style="font-weight:400;font-size:0.7rem;">(100g per 500g flour)</span></button>
+        <button class="pill" onclick="setStarterPct(25,this)">25% <span style="font-weight:400;font-size:0.7rem;">(125g per 500g flour)</span></button>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Flour weight per loaf <span class="hint">grams</span></label>
+      <div class="input-row">
+        <input type="number" id="flour-per-loaf" value="500" min="200" max="2000" step="50" oninput="calculate()">
+        <span class="unit">grams</span>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>How do you feed Mabel? <span class="hint">starter : flour : water</span></label>
+      <p style="font-size:0.78rem;color:var(--muted);line-height:1.5;margin-bottom:0.6rem;">For every 1 part of starter you keep, how much flour and water do you add? 1:1:1 means equal parts of each — the most common starting point.</p>
+      <div class="pill-row" id="ratio-pills">
+        <button class="pill active" onclick="setRatio(1,1,1,this)">1:1:1</button>
+        <button class="pill" onclick="setRatio(1,2,2,this)">1:2:2</button>
+        <button class="pill" onclick="setRatio(1,3,3,this)">1:3:3</button>
+        <button class="pill" onclick="setRatio(1,5,5,this)">1:5:5</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Answer -->
+  <div class="answer-card">
+    <p class="answer-eyebrow">Mabel's feeding plan</p>
+    <p class="answer-headline" id="answer-headline">For <em>2 loaves</em> tomorrow, feed Mabel this morning with:</p>
+    <div class="feed-grid">
+      <div class="feed-item highlight">
+        <p class="feed-label">Starter (discard to)</p>
+        <p class="feed-value" id="res-seed">20</p>
+        <p class="feed-unit">grams</p>
+      </div>
+      <div class="feed-item">
+        <p class="feed-label">Add flour</p>
+        <p class="feed-value" id="res-flour">20</p>
+        <p class="feed-unit">grams</p>
+      </div>
+      <div class="feed-item">
+        <p class="feed-label">Add water</p>
+        <p class="feed-value" id="res-water">20</p>
+        <p class="feed-unit">grams</p>
+      </div>
+      <div class="feed-item">
+        <p class="feed-label">Total after feeding</p>
+        <p class="feed-value" id="res-total">60</p>
+        <p class="feed-unit">grams</p>
+      </div>
+      <div class="feed-item">
+        <p class="feed-label">Use in dough</p>
+        <p class="feed-value" id="res-use">200</p>
+        <p class="feed-unit">grams</p>
+      </div>
+    </div>
+    <div style="margin-top:1rem; padding-top:1rem; border-top:1px solid rgba(255,255,255,0.08);">
+      <p style="font-size:0.78rem; color:var(--subtle); line-height:1.6;" id="leftover-note"></p>
+    </div>
+  </div>
+
+  <!-- Timeline -->
+  <div class="card">
+    <p class="card-title"><span class="dot"></span>Your 2-day timeline</p>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot active"></div>
+        <p class="tl-time">Day 1 — Morning</p>
+        <p class="tl-name">Feed Mabel</p>
+        <p class="tl-desc" id="tl-feed-desc">Discard down to your seed amount, then add flour and water per the amounts above. Leave at room temperature.</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot active"></div>
+        <p class="tl-time">Day 1 — 4 to 6 hours later</p>
+        <p class="tl-name">Check Mabel — is she at peak?</p>
+        <p class="tl-desc">She should have doubled (or more) and be domed at the top. Do the float test: drop a small spoonful in water — if it floats, she's ready. If not, give her more time.</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot active"></div>
+        <p class="tl-time">Day 1 — When Mabel peaks</p>
+        <p class="tl-name">Mix your dough</p>
+        <p class="tl-desc" id="tl-mix-desc">Combine your flour, water, starter, and salt. Autolyse for 30 minutes then begin stretch and folds.</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <p class="tl-time">Day 1 — Afternoon / Evening</p>
+        <p class="tl-name">Bulk fermentation + shape</p>
+        <p class="tl-desc">4–6 hours of bulk ferment at room temp (4 sets of stretch &amp; folds in the first 2 hours). Shape your loaves, place in bannetons, cover.</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <p class="tl-time">Day 1 — Night</p>
+        <p class="tl-name">Into the fridge</p>
+        <p class="tl-desc">Cold proof overnight — 8 to 16 hours. This develops flavour and makes scoring easier. Don't skip this.</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot bake"></div>
+        <p class="tl-time">Day 2 — Morning</p>
+        <p class="tl-name">Preheat, score &amp; bake 🍞</p>
+        <p class="tl-desc">Preheat oven + dutch oven to 475°F for 45–60 min. Score straight from the fridge, bake lid on 18–20 min, remove lid, drop to 450°F and bake another 18–20 min until internal temp hits 205–210°F.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="tip-box">
+    <strong>Mabel tip — always keep some back</strong>
+    Never use all of your starter in a bake. Always keep at least 20–30g back so you can feed her again for the next bake. The amounts above already account for this — the "use in dough" amount leaves Mabel with enough to carry on.
+  </div>
+
+  <div class="footer-cta">
+    <p>More tips, recipes &amp; sourdough content</p>
+    <strong>Molly, Mabel &amp; Crumb</strong>
+    <span class="handle">@MollyMabelCrumb on Instagram</span>
+  </div>
+
+</main>
+
+<script>
+let loaves = 2;
+let starterPct = 20;
+let flourPerLoaf = 500;
+let ratioSeed = 1, ratioFlour = 1, ratioWater = 1;
+
+function setLoaves(n, btn) {
+  loaves = n;
+  document.querySelectorAll('#loaf-pills .pill').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  calculate();
+}
+function setStarterPct(n, btn) {
+  starterPct = n;
+  document.querySelectorAll('#pct-pills .pill').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  calculate();
+}
+function setRatio(s, f, w, btn) {
+  ratioSeed = s; ratioFlour = f; ratioWater = w;
+  document.querySelectorAll('#ratio-pills .pill').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  calculate();
+}
+
+function calculate() {
+  flourPerLoaf = parseFloat(document.getElementById('flour-per-loaf').value) || 500;
+
+  // Total starter needed across all loaves
+  const starterNeeded = Math.ceil(flourPerLoaf * loaves * (starterPct / 100));
+
+  // Add 15% buffer so there's always some left after the bake
+  const starterTarget = Math.ceil(starterNeeded * 1.15);
+
+  // Work back from ratio: if total = seed*(1 + ratioFlour + ratioWater), seed = total/(1+f+w)
+  const seed = Math.ceil(starterTarget / (ratioSeed + ratioFlour + ratioWater));
+  const feedFlour = Math.round(seed * (ratioFlour / ratioSeed));
+  const feedWater = Math.round(seed * (ratioWater / ratioSeed));
+  const totalAfter = seed + feedFlour + feedWater;
+  const leftover = totalAfter - starterNeeded;
+
+  document.getElementById('res-seed').textContent = seed;
+  document.getElementById('res-flour').textContent = feedFlour;
+  document.getElementById('res-water').textContent = feedWater;
+  document.getElementById('res-total').textContent = totalAfter;
+  document.getElementById('res-use').textContent = starterNeeded;
+
+  const loafWord = loaves === 1 ? 'loaf' : 'loaves';
+  document.getElementById('answer-headline').innerHTML =
+    `For <em>${loaves} ${loafWord}</em> tomorrow, feed Mabel this morning with:`;
+
+  document.getElementById('leftover-note').innerHTML =
+    `After using <strong>${starterNeeded}g</strong> in your dough, Mabel will have about <strong>${leftover}g</strong> left — enough to keep her going for your next bake. 🫙`;
+
+  document.getElementById('tl-feed-desc').textContent =
+    `Discard Mabel down to ${seed}g, then add ${feedFlour}g flour and ${feedWater}g water. Stir well and leave at room temperature uncovered or loosely covered.`;
+
+  document.getElementById('tl-mix-desc').textContent =
+    `Use ${starterNeeded}g of Mabel in your dough across ${loaves} ${loafWord} (${Math.round(flourPerLoaf * starterPct/100)}g per loaf). Combine with your flour, water, and salt — use the recipe calculator for exact amounts.`;
+}
+
+calculate();
+</script>
+</body>
+</html>
