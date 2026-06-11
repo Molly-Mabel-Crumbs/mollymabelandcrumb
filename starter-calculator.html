@@ -59,17 +59,7 @@
   .feed-item.highlight .feed-value { color: var(--white); }
   .feed-unit { font-size: 0.72rem; color: var(--subtle); margin-top: 3px; }
 
-  /* Timeline */
-  .timeline { position: relative; padding-left: 28px; }
-  .timeline::before { content: ''; position: absolute; left: 8px; top: 8px; bottom: 8px; width: 1.5px; background: var(--border); }
-  .tl-item { position: relative; padding: 0 0 1.1rem 1rem; }
-  .tl-item:last-child { padding-bottom: 0; }
-  .tl-dot { position: absolute; left: -24px; top: 3px; width: 12px; height: 12px; border-radius: 50%; background: var(--parchment); border: 2px solid var(--border); }
-  .tl-dot.active { background: var(--crust); border-color: var(--crust); }
-  .tl-dot.bake { background: var(--char); border-color: var(--char); }
-  .tl-time { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--crust); margin-bottom: 2px; }
-  .tl-name { font-size: 0.88rem; font-weight: 600; color: var(--char); }
-  .tl-desc { font-size: 0.78rem; color: var(--muted); margin-top: 2px; line-height: 1.5; }
+
 
   .tip-box { background: var(--crust-light); border-left: 3px solid var(--crust); border-radius: 0 8px 8px 0; padding: 0.85rem 1rem; font-size: 0.82rem; color: var(--crust-dark); line-height: 1.55; margin-top: 1rem; }
   .tip-box strong { font-weight: 600; display: block; margin-bottom: 2px; }
@@ -177,58 +167,82 @@
     </div>
   </div>
 
-  <!-- Timeline -->
+  <!-- Starter health check guide -->
   <div class="card">
-    <p class="card-title"><span class="dot"></span>Your 2-day timeline</p>
-    <div class="timeline">
-      <div class="tl-item">
-        <div class="tl-dot active"></div>
-        <p class="tl-time">Day 1 — Morning</p>
-        <p class="tl-name">Feed Mabel</p>
-        <p class="tl-desc" id="tl-feed-desc">Discard down to your seed amount, then add flour and water per the amounts above. Leave at room temperature.</p>
+    <p class="card-title"><span class="dot"></span>What Mabel should be doing after feeding</p>
+    <p style="font-size:0.82rem;color:var(--muted);margin-bottom:1.25rem;line-height:1.6;">After you feed her, here's what to watch for — and what to do if things look off.</p>
+
+    <div style="display:flex;flex-direction:column;gap:10px;">
+
+      <div style="background:var(--parchment);border-radius:10px;padding:1rem 1.1rem;border-left:3px solid var(--crust);">
+        <p style="font-size:0.72rem;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:var(--crust);margin-bottom:4px;">1–2 hours after feeding</p>
+        <p style="font-size:0.88rem;font-weight:600;color:var(--char);margin-bottom:4px;">You should see small bubbles forming</p>
+        <p style="font-size:0.8rem;color:var(--muted);line-height:1.55;">Tiny bubbles around the edges and through the starter mean fermentation has started. This is a good sign — Mabel is waking up. No bubbles at all after 2 hours? Your kitchen may be too cold — try moving her somewhere warmer like the top of the fridge or near the oven.</p>
       </div>
-      <div class="tl-item">
-        <div class="tl-dot active"></div>
-        <p class="tl-time">Day 1 — 4 to 6 hours later</p>
-        <p class="tl-name">Check Mabel — is she at peak?</p>
-        <p class="tl-desc">She should have doubled (or more) and be domed at the top. Do the float test: drop a small spoonful in water — if it floats, she's ready. If not, give her more time.</p>
+
+      <div style="background:var(--parchment);border-radius:10px;padding:1rem 1.1rem;border-left:3px solid var(--crust);">
+        <p style="font-size:0.72rem;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:var(--crust);margin-bottom:4px;">3–4 hours after feeding</p>
+        <p style="font-size:0.88rem;font-weight:600;color:var(--char);margin-bottom:4px;">She should be visibly rising</p>
+        <p style="font-size:0.8rem;color:var(--muted);line-height:1.55;">Mark the side of your jar with a rubber band or piece of tape right after feeding — this makes it easy to see exactly how much she's grown. At this point she should be noticeably higher than your mark. If she hasn't moved much, give her more time before worrying — temperature plays a huge role.</p>
       </div>
-      <div class="tl-item">
-        <div class="tl-dot active"></div>
-        <p class="tl-time">Day 1 — When Mabel peaks</p>
-        <p class="tl-name">Mix your dough</p>
-        <p class="tl-desc" id="tl-mix-desc">Combine your flour, water, starter, and salt. Autolyse for 30 minutes then begin stretch and folds.</p>
+
+      <div style="background:var(--parchment);border-radius:10px;padding:1rem 1.1rem;border-left:3px solid #5A8A3C;">
+        <p style="font-size:0.72rem;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:#5A8A3C;margin-bottom:4px;">4–6 hours after feeding — the goal ✓</p>
+        <p style="font-size:0.88rem;font-weight:600;color:var(--char);margin-bottom:4px;">Peak rise — Mabel is ready to bake with</p>
+        <p style="font-size:0.8rem;color:var(--muted);line-height:1.55;">She should have doubled (or more), be domed or slightly domed on top, and smell yeasty and slightly tangy. This is peak — the best time to use her. <strong style="color:var(--char);">Do the float test:</strong> drop a small spoonful into a glass of water. If it floats, she's ready. If it sinks, give her another 30–60 minutes and test again.</p>
       </div>
-      <div class="tl-item">
-        <div class="tl-dot"></div>
-        <p class="tl-time">Day 1 — Afternoon / Evening</p>
-        <p class="tl-name">Bulk fermentation + shape</p>
-        <p class="tl-desc">4–6 hours of bulk ferment at room temp (4 sets of stretch &amp; folds in the first 2 hours). Shape your loaves, place in bannetons, cover.</p>
+
+      <div style="background:var(--parchment);border-radius:10px;padding:1rem 1.1rem;border-left:3px solid var(--subtle);">
+        <p style="font-size:0.72rem;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:var(--muted);margin-bottom:4px;">After peak — falling back down</p>
+        <p style="font-size:0.88rem;font-weight:600;color:var(--char);margin-bottom:4px;">Don't miss the window — but all is not lost</p>
+        <p style="font-size:0.8rem;color:var(--muted);line-height:1.55;">Once she starts falling she's past peak. Bread made with over-peaked starter can still be good but may be more sour and have less oven spring. If you missed it today, just feed her again and try tomorrow — don't use a starter that has fully collapsed and smells very acidic.</p>
       </div>
-      <div class="tl-item">
-        <div class="tl-dot"></div>
-        <p class="tl-time">Day 1 — Night</p>
-        <p class="tl-name">Into the fridge</p>
-        <p class="tl-desc">Cold proof overnight — 8 to 16 hours. This develops flavour and makes scoring easier. Don't skip this.</p>
+
+    </div>
+  </div>
+
+  <!-- Pro tips card -->
+  <div class="card">
+    <p class="card-title"><span class="dot"></span>Pro tips for a stronger starter</p>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+
+      <div style="background:var(--crust-light);border-radius:10px;padding:1rem 1.1rem;">
+        <p style="font-size:0.82rem;font-weight:600;color:var(--crust-dark);margin-bottom:3px;">🌾 Slow to rise? Add a little whole wheat flour</p>
+        <p style="font-size:0.78rem;color:var(--crust-dark);line-height:1.55;opacity:0.85;">Whole wheat flour has more wild yeast and nutrients than white flour, which gives your starter a real boost. Try replacing 20–30% of your feed flour with whole wheat (e.g. 15g whole wheat + 35g bread flour instead of 50g bread flour). You'll likely notice a faster, more active rise within a feed or two.</p>
       </div>
-      <div class="tl-item">
-        <div class="tl-dot bake"></div>
-        <p class="tl-time">Day 2 — Morning</p>
-        <p class="tl-name">Preheat, score &amp; bake 🍞</p>
-        <p class="tl-desc">Preheat oven + dutch oven to 475°F for 45–60 min. Score straight from the fridge, bake lid on 18–20 min, remove lid, drop to 450°F and bake another 18–20 min until internal temp hits 205–210°F.</p>
+
+      <div style="background:var(--crust-light);border-radius:10px;padding:1rem 1.1rem;">
+        <p style="font-size:0.82rem;font-weight:600;color:var(--crust-dark);margin-bottom:3px;">🌡️ Temperature is everything</p>
+        <p style="font-size:0.78rem;color:var(--crust-dark);line-height:1.55;opacity:0.85;">A starter at 75–80°F peaks in 4–6 hours. The same starter at 65°F might take 8–10 hours. If your kitchen is cold in winter, your starter isn't broken — she's just slow. A reliable warm spot: on top of your fridge, inside your oven with just the light on, or next to a warm appliance.</p>
       </div>
+
+      <div style="background:var(--crust-light);border-radius:10px;padding:1rem 1.1rem;">
+        <p style="font-size:0.82rem;font-weight:600;color:var(--crust-dark);margin-bottom:3px;">💧 Use lukewarm water, not cold</p>
+        <p style="font-size:0.78rem;color:var(--crust-dark);line-height:1.55;opacity:0.85;">Cold tap water slows fermentation significantly. Use water that's around 75–80°F — comfortable to the touch but not hot. If your tap water is heavily chlorinated, let it sit in an open container for an hour first or use filtered water.</p>
+      </div>
+
+      <div style="background:var(--crust-light);border-radius:10px;padding:1rem 1.1rem;">
+        <p style="font-size:0.82rem;font-weight:600;color:var(--crust-dark);margin-bottom:3px;">📏 Mark your jar every time</p>
+        <p style="font-size:0.78rem;color:var(--crust-dark);line-height:1.55;opacity:0.85;">A rubber band or piece of masking tape at the starting level after each feed makes it so easy to track rise. You can see at a glance if she's doubled, and you'll start to learn her rhythm — how fast she rises, when she peaks, when she starts to fall. This is how you get consistent bakes.</p>
+      </div>
+
+      <div style="background:var(--crust-light);border-radius:10px;padding:1rem 1.1rem;">
+        <p style="font-size:0.82rem;font-weight:600;color:var(--crust-dark);margin-bottom:3px;">🫙 Don't seal the jar completely</p>
+        <p style="font-size:0.78rem;color:var(--crust-dark);line-height:1.55;opacity:0.85;">Your starter produces CO₂ as it ferments — it needs to breathe. Use a loose lid, a cloth cover, or a jar lid set on top without locking. A sealed jar can build pressure and slow things down (or make a mess when you open it!).</p>
+      </div>
+
     </div>
   </div>
 
   <div class="tip-box">
-    <strong>Mabel tip — always keep some back</strong>
-    Never use all of your starter in a bake. Always keep at least 20–30g back so you can feed her again for the next bake. The amounts above already account for this — the "use in dough" amount leaves Mabel with enough to carry on.
+    <strong>Always keep some Mabel back 🫙</strong>
+    Never use all of your starter in a bake. Always keep at least 20–30g back so you can feed her again. The amounts above already account for this — the "use in dough" amount leaves Mabel with enough to carry on to your next bake.
   </div>
 
   <div class="footer-cta">
     <p>More tips, recipes &amp; sourdough content</p>
     <strong>Molly, Mabel &amp; Crumb</strong>
-    <span class="handle">@MollyMabelCrumb on Instagram</span>
+    <span class="handle">@Molly.Mabel.andCrumbs on Instagram</span>
   </div>
 
 </main>
@@ -287,14 +301,7 @@ function calculate() {
   document.getElementById('leftover-note').innerHTML =
     `After using <strong>${starterNeeded}g</strong> in your dough, Mabel will have about <strong>${leftover}g</strong> left — enough to keep her going for your next bake. 🫙`;
 
-  document.getElementById('tl-feed-desc').textContent =
-    `Discard Mabel down to ${seed}g, then add ${feedFlour}g flour and ${feedWater}g water. Stir well and leave at room temperature uncovered or loosely covered.`;
-
-  document.getElementById('tl-mix-desc').textContent =
-    `Use ${starterNeeded}g of Mabel in your dough across ${loaves} ${loafWord} (${Math.round(flourPerLoaf * starterPct/100)}g per loaf). Combine with your flour, water, and salt — use the recipe calculator for exact amounts.`;
-}
-
-calculate();
+  calculate();
 </script>
 </body>
 </html>
